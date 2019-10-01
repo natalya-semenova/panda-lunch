@@ -1,12 +1,10 @@
 import { JSDOM } from 'jsdom';
 
-import downloadAndSave from '@/helpers/download-and-save';
+import downloadToBuffer from '@/helpers/download-to-buffer';
 
 
 const URL = 'https://www.baobar.at/menu';
 const menuSelector = 'img[alt="MENU_BAOBAR_AC.jpg"]';
-
-const saveBaobar = downloadAndSave('baobar.png');
 
 export default function getBaobar() {
   return JSDOM.fromURL(URL)
@@ -18,5 +16,5 @@ export default function getBaobar() {
         .replace(/h_(\d{2})/, 'h_$10')
         .replace(',blur_2', '');
     })
-    .then(saveBaobar);
+    .then(downloadToBuffer);
 }

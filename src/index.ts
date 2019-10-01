@@ -47,7 +47,7 @@ bot.on('sticker', ctx => ctx.reply(ctx.message.sticker.file_id));
 bot.command('spoon', async (ctx) => {
   try {
     const menu = await spoon();
-    ctx.replyWithMarkdown(menu);
+    await ctx.replyWithMarkdown(menu);
   } catch (e) {
     console.error(e);
     ctx.replyWithSticker(stickers.difficult);
@@ -59,8 +59,10 @@ bot.command('spoon', async (ctx) => {
  */
 bot.command('sky', async (ctx) => {
   try {
-    await sky();
-    ctx.replyWithMarkdown('done');
+    const buffer = await sky();
+    await ctx.replyWithPhoto({
+      source: buffer,
+    });
   } catch (e) {
     console.error(e);
     ctx.replyWithSticker(stickers.difficult);
@@ -72,8 +74,11 @@ bot.command('sky', async (ctx) => {
  */
 bot.command('bao', async (ctx) => {
   try {
-    await baobar();
-    ctx.replyWithMarkdown('done');
+    const buffer = await baobar();
+
+    await ctx.replyWithPhoto({
+      source: buffer,
+    });
   } catch (e) {
     console.error(e);
     ctx.replyWithSticker(stickers.difficult);
@@ -85,8 +90,13 @@ bot.command('bao', async (ctx) => {
  */
 bot.command('kammer', async (ctx) => {
   try {
-    await kammerdiener();
-    ctx.replyWithMarkdown('done');
+    const [buf1, buf2] = await kammerdiener();
+    await ctx.replyWithPhoto({
+      source: buf1,
+    });
+    await ctx.replyWithPhoto({
+      source: buf2,
+    });
   } catch (e) {
     console.error(e);
     ctx.replyWithSticker(stickers.difficult);

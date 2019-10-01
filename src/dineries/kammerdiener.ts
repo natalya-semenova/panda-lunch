@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 
-import downloadAndSave from '@/helpers/download-and-save';
+import downloadToBuffer from '@/helpers/download-to-buffer';
 
 
 const URL = 'https://kammerdiener.wien/speisekarte/';
@@ -11,7 +11,7 @@ export default function getKammerdiener() {
     .then(({ window }) => Array.from(
         window.document.querySelectorAll(menuSelector),
         (item: HTMLImageElement) => item.src,
-      ).map((e, idx) => downloadAndSave(`kammerdiener-${idx}.png`, e)),
+      ).map(downloadToBuffer),
     )
     .then(p => Promise.all(p));
 }

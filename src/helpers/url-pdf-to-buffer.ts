@@ -1,6 +1,5 @@
 import { createCanvas } from 'canvas';
 import pdfjsLib from 'pdfjs-dist';
-import saveToFile from './save-to-file';
 
 interface ICanvasAndContext {
   canvas: any;
@@ -30,11 +29,13 @@ class NodeCanvasFactory {
   }
 }
 
-export default function savePng(url: string, pngFile: string) {
+export default function getBuffer(url: string) {
   console.log('url', url);
 
-  return pdfjsLib.getDocument(url).promise.then((pdfDocument) => {
-    pdfDocument.getPage(1).then((page) => {
+  return pdfjsLib.getDocument(url).promise
+    .then((pdfDocument) => pdfDocument.getPage(1))
+    .then(async (p) => {
+      const page = ((p as any) as pdfjsLib.PDFPageProxy);
       const viewport = page.getViewport({ scale: 1.5 });
       const canvasFactory = new NodeCanvasFactory();
       const canvasAndContext = canvasFactory.create(viewport.width, viewport.height);
@@ -43,11 +44,8 @@ export default function savePng(url: string, pngFile: string) {
         viewport,
         canvasFactory,
       };
+      await page.render(renderContext).promise;
 
-      page.render(renderContext).promise.then(() => {
-        const image = canvasAndContext.canvas.toBuffer();
-        saveToFile(image, pngFile);
-      });
+      return canvasAndContext.canvas.toBuffer();
     });
-  });
 }
