@@ -1,33 +1,33 @@
+import { JSDOM } from 'jsdom';
+
 import {
-  endOfWeek,
+  addDays,
+  startOfDay,
   startOfWeek,
 } from 'date-fns';
 import {
   format,
-  getWeek,
-  getYear,
 } from 'date-fns/fp';
 
-import urlPdfToPng from '@/helpers/url-pdf-to-png';
 
-const menuDraft = o =>
-  `http://www.albatros-catering.at/wp-content/uploads/${o.year}/${o.month}/Wochenspeiseplan-WO-${o.week}-von-${o.start}-bis-${o.end}.pdf`;
+const URL = 'http://www.albatros-catering.at/sky-lunch/wochen-speiseplan/';
+const menuSelector = 'strong > a';
 
 const formatDate = format('dd.MM.yyyy');
-const formatMonth = format('MM');
+const date = new Date();
+const weekStart = startOfDay(startOfWeek(date, {weekStartsOn: 1}));
+const start = formatDate(weekStart);
+const end = formatDate(addDays(weekStart, 4));
+
 
 export default function getSky() {
-  const date = new Date();
-  const week = getWeek(date);
-  const weekStart = startOfWeek(date, {weekStartsOn: 1});
-  const start = formatDate(weekStart);
-  const end = formatDate(endOfWeek(date, {weekStartsOn: 6}));
+  return JSDOM.fromURL(URL)
+    .then(({ window }) => {
+      const { href } = window.document.querySelector(menuSelector);
 
-  return urlPdfToPng(menuDraft({
-    year: getYear(weekStart),
-    month: formatMonth(weekStart),
-    start,
-    end,
-    week,
-  }), 'skylunch.png');
+      return {
+        href,
+        name: `sky-${start}-${end}.pdf`,
+      };
+    });
 }

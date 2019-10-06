@@ -16,13 +16,11 @@
   "author": "Natalya Semenova",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.6.0",
     "date-fns": "^2.3.0",
     "dotenv": "^8.1.0",
     "jsdom": "^15.1.1",
     "module-alias": "^2.2.2",
     "node-fetch": "^2.6.0",
-    "pdfjs-dist": "^2.1.266",
     "ramda": "^0.26.1",
     "telegraf": "^3.32.0",
     "winston": "^3.2.1"
