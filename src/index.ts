@@ -64,12 +64,12 @@ const handleRequest = async (ctx: ContextMessageUpdate, fn: () => any) => {
 
 dotenv.config();
 
-const port = parseInt(process.env.PANDALUNCH_PORT, 10) || 8443;
+// const port = parseInt(process.env.PANDALUNCH_PORT, 10) || 8443;
 const token = process.env.PANDALUNCH_TOKEN;
 
 const bot = new Telegraf(token);
 
-bot.telegram.setWebhook(`https://96bdb457.ngrok.io`);
+// bot.telegram.setWebhook(`https://96bdb457.ngrok.io`);
 
 bot.start(async (ctx) => {
   await ctx.reply('Welcome 🐼');
@@ -134,4 +134,5 @@ bot.command('kammer', async (ctx: ContextMessageUpdate) => {
   });
 });
 
-bot.startWebhook('/', null, port);
+// bot.startWebhook('/', null, port);
+bot.launch();
